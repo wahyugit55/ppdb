@@ -46,7 +46,12 @@ class SiswaAkunController extends Controller
         ]);
 
         // Redirect ke halaman login atau dashboard dengan pesan sukses
-        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+        // return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+
+        // Setelah menyimpan data pengguna
+        session()->flash('registration_success', 'Pendaftaran Berhasil, anda akan diarahkan ke halaman login.');
+        // Redirect ke halaman yang sama atau lain dengan session message
+        return redirect()->back();
     }
 
     public function login(Request $request)
@@ -61,12 +66,15 @@ class SiswaAkunController extends Controller
         if (Auth::guard('siswa')->attempt($credentials, $request->filled('remember'))) {
             // Jika berhasil, redirect ke dashboard atau halaman lain
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended(route('siswa.dashboard'));
         }
+
+        // Setelah menyimpan data pengguna
+        session()->flash('registration_failed', 'Login Gagal, periksa no pendaftaran dan password anda !');
 
         // Jika gagal, kembali ke form login dengan pesan error
         return back()->withErrors([
-            'nisn' => 'The provided credentials do not match our records.',
+            'no_pendaftaran' => 'The provided credentials do not match our records.',
         ]);
     }
 
