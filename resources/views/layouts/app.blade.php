@@ -132,6 +132,8 @@
     <script src="{{ asset('js/plugin/bootstrap-toggle/bootstrap-toggle.min.js') }}"></script>
     <!-- jQuery Scrollbar -->
     <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+	<!-- Select2 -->
+	<script src="{{ asset('js/plugin/select2/select2.full.min.js') }}"></script>
     <!-- Atlantis JS -->
     <script src="{{ asset('js/atlantis.min.js') }}"></script>
 
@@ -148,6 +150,16 @@
 					},
 				});
 			@endif
+		});
+	</script>
+	<script>
+		$('#basic').select2({
+			theme: "bootstrap"
+		});
+	</script>
+	<script>
+		$('#basic2').select2({
+			theme: "bootstrap"
 		});
 	</script>
 </body>
