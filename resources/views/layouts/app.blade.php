@@ -6,6 +6,7 @@
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- Icon -->
     <link rel="icon" href="{{ asset('img/icon.ico') }}" type="image/x-icon"/>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
         
     <!-- Fonts and Icons -->
     <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
@@ -24,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('css/atlantis.css') }}">
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('css/demo.css') }}">
+	<script src="{{ asset('js/core/jquery.3.2.1.min.js') }}"></script>
 
 </head>
 <body>
@@ -118,8 +120,7 @@
 		</div>
 		<!-- End Custom template -->
 	</div>
-	<!-- Core JS Files -->
-    <script src="{{ asset('js/core/jquery.3.2.1.min.js') }}"></script>
+	<!-- Core JS Files -->    
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
     <!-- jQuery UI -->
@@ -134,6 +135,20 @@
     <!-- Atlantis JS -->
     <script src="{{ asset('js/atlantis.min.js') }}"></script>
 
-	
+	<script>
+		$(document).ready(function() {
+			// Periksa apakah ada pesan 'success' dari sesi Laravel
+			@if(session('success'))
+				swal({
+					title: "Berhasil",
+					text: "{{ session('success') }}",
+					icon: "success",
+					button: {
+						className: 'btn btn-success'
+					},
+				});
+			@endif
+		});
+	</script>
 </body>
 </html>

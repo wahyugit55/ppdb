@@ -7,6 +7,8 @@ use App\Models\SiswaAkun;
 use Illuminate\Http\Request;
 use App\Models\SiswaPembayaran;
 use Illuminate\Support\Str;
+use PDF;
+use Milon\Barcode\DNS1D;
 
 class SiswaPembayaranController extends Controller
 {
@@ -69,6 +71,8 @@ class SiswaPembayaranController extends Controller
         SiswaPembayaran::create($data);
 
         return redirect()->back()->with('success', 'Pembayaran berhasil ditambahkan.');
+
+        return redirect()->back();
     }
 
 
@@ -88,7 +92,7 @@ class SiswaPembayaranController extends Controller
 
         if ($request->hasFile('bukti_pembayaran')) {
             $file = $request->file('bukti_pembayaran');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads'), $filename);
             $data['bukti_pembayaran'] = $filename;
         }
@@ -98,14 +102,45 @@ class SiswaPembayaranController extends Controller
         return redirect()->back()->with('success', 'Pembayaran berhasil diperbarui.');
     }
 
-    
+
+    public function edit($id)
+    {
+        $pembayaran = SiswaPembayaran::with(['biaya', 'siswa'])->findOrFail($id);
+        // Format tanggal sebelum dikirim
+        $pembayaran->tgl_pembayaran = $pembayaran->tgl_pembayaran->format('Y-m-d');
+        return response()->json($pembayaran);
+    }
 
     public function destroy($id)
     {
-        $pembayaran = SiswaPembayaran::findOrFail($id);
-        $pembayaran->delete();
-    
-        return redirect()->back()->with('success', 'Pembayaran berhasil dihapus.');
+        try {
+            $pembayaran = SiswaPembayaran::findOrFail($id);
+            // Jika ada file/bukti pembayaran yang terkait, Anda mungkin ingin menghapusnya dari server juga
+            if ($pembayaran->bukti_pembayaran) {
+                $file_path = public_path('uploads/' . $pembayaran->bukti_pembayaran);
+                if (file_exists($file_path)) {
+                    @unlink($file_path);
+                }
+            }
+            
+            $pembayaran->delete();
+
+            // Mengembalikan respons JSON untuk AJAX
+            return response()->json(['success' => 'Pembayaran berhasil dihapus.'], 200);
+        } catch (\Exception $e) {
+            // Mengembalikan respons error jika terjadi kesalahan
+            return response()->json(['error' => 'Terjadi kesalahan saat menghapus pembayaran.'], 500);
+        }
+    }
+
+    public function printBuktiBayar($id)
+    {
+        $pembayaran = SiswaPembayaran::with(['siswa', 'biaya'])->findOrFail($id);
+        $d = new DNS1D();
+        $barcode = $d->getBarcodeHTML($pembayaran->kode_transaksi, 'C128');
+
+        $pdf = PDF::loadView('pembayaran.print', compact('pembayaran', 'barcode'));
+        return $pdf->stream('bukti_pembayaran.pdf');
     }
     
 }
