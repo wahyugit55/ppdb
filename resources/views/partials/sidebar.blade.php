@@ -1,6 +1,6 @@
 <div class="sidebar-wrapper scrollbar scrollbar-inner">
     <div class="sidebar-content">
-        <div class="user">
+        {{-- <div class="user">
             <div class="avatar-sm float-left mr-2">
                 <img src="../../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
             </div>
@@ -34,101 +34,43 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <ul class="nav nav-primary">
             <li class="nav-item">
-                <a href="../widgets.html">
-                    <i class="fas fa-desktop"></i>
-                    <p>Widgets</p>
-                    <span class="badge badge-success">4</span>
+                <a href="/dashboard">
+                    <i class="fas fa-home"></i>
+                    <p>Dashboard</p>
+                    {{-- <span class="badge badge-success">4</span> --}}
                 </a>
             </li>
             <li class="nav-section">
                 <span class="sidebar-mini-icon">
                     <i class="fa fa-ellipsis-h"></i>
                 </span>
-                <h4 class="text-section">Snippets</h4>
+                <h4 class="text-section">Main Menu</h4>
             </li>
             <li class="nav-item">
-                <a data-toggle="collapse" href="#email-nav">
-                    <i class="far fa-envelope"></i>
-                    <p>Email</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="email-nav">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="../email-inbox.html">
-                                <span class="sub-item">Inbox</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../email-compose.html">
-                                <span class="sub-item">Email Compose</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../email-detail.html">
-                                <span class="sub-item">Email Detail</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#messages-app-nav">
-                    <i class="far fa-paper-plane"></i>
-                    <p>Messages App</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="messages-app-nav">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="../messages.html">
-                                <span class="sub-item">Messages</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../conversations.html">
-                                <span class="sub-item">Conversations</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a href="../projects.html">
-                    <i class="fas fa-file-signature"></i>
-                    <p>Projects</p>
-                    <span class="badge badge-count">5</span>
+                <a href="/gelombang">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Gelombang</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../boards.html">
-                    <i class="fas fa-th-list"></i>
-                    <p>Boards</p>
-                    <span class="badge badge-count">4</span>
+                <a href="/jalur-seleksi">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Jalur Seleksi</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../invoice.html">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <p>Invoices</p>
-                    <span class="badge badge-count">6</span>
+                <a href="/pilih-jurusan">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Jurusan</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../pricing.html">
-                    <i class="fas fa-tag"></i>
-                    <p>Pricing</p>
-                    <span class="badge badge-count">6</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../faqs.html">
-                    <i class="far fa-question-circle"></i>
-                    <p>Faqs</p>
-                    <span class="badge badge-count">6</span>
+                <a href="/program-tambahan">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Program Tambahan</p>
                 </a>
             </li>
             <li class="nav-item">
