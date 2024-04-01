@@ -153,12 +153,12 @@
 		});
 	</script>
 	<script>
-		$('#basic').select2({
+		$('#pilihan_1').select2({
 			theme: "bootstrap"
 		});
 	</script>
 	<script>
-		$('#basic2').select2({
+		$('#pilihan_2').select2({
 			theme: "bootstrap"
 		});
 	</script>

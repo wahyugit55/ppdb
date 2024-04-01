@@ -32,18 +32,29 @@ class SiswaJurusanController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $exists = SiswaPilihJurusan::where('siswa_id', Auth::user()->id)->exists();
+        $siswaId = Auth::user()->id;
 
-        if ($exists) {
-            return response()->json(['warning' => 'Anda sudah memilih jurusan. Apakah Anda ingin merubahnya?']);
+        // Cek apakah siswa sudah memiliki pilihan jurusan
+        $pilihanSiswa = SiswaPilihJurusan::where('siswa_id', $siswaId)->first();
+
+        if ($pilihanSiswa) {
+            // Jika sudah memiliki pilihan, perbarui pilihan jurusan
+            $pilihanSiswa->update([
+                'pilihan_1' => $request->pilihan_1,
+                'pilihan_2' => $request->pilihan_2,
+            ]);
+
+            return response()->json(['success' => 'Pilihan jurusan berhasil diperbaharui.']);
+        } else {
+            // Jika belum memiliki pilihan, buat pilihan baru
+            SiswaPilihJurusan::create([
+                'siswa_id' => $siswaId,
+                'pilihan_1' => $request->pilihan_1,
+                'pilihan_2' => $request->pilihan_2,
+            ]);
+
+            return response()->json(['success' => 'Pilihan jurusan berhasil disimpan.']);
         }
-
-        SiswaPilihJurusan::create([
-            'siswa_id' => Auth::user()->id,
-            'pilihan_1' => $request->pilihan_1,
-            'pilihan_2' => $request->pilihan_2,
-        ]);
-
-        return response()->json(['success' => 'Pilihan jurusan berhasil disimpan.']);
     }
+
 }

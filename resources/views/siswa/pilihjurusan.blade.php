@@ -29,6 +29,7 @@
                     <ul>
                         <li>Pilihan 1 : Adalah jurusan yang akan di prioritaskan untuk anda.</li>
                         <li>Pilihan 2 : Jika tidak diterima di pilihan ke-1, maka anda memiliki kesempatan untuk diterima di jurusan ke-2.</li>
+                        <li>Pilihan 1 dan 2 wajib dipilih agar dapat melanjutkan ke langkah berikut nya.</li>
                     </ul>
                 </div>
                 <div class="row">
@@ -37,7 +38,7 @@
                             <label>Pilihan 1</label>
                             <div class="select2-input">
                                 <select id="pilihan_1" name="pilihan_1" class="form-control" required>
-                                    <option value="">&nbsp;</option>
+                                    <option value="">--Pilih Salah Satu--</option>
                                     @foreach($jurusan as $j)
                                         <option value="{{ $j->id }}" {{ (isset($pilihanSiswa) && $pilihanSiswa->pilihan_1 == $j->id) ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
                                     @endforeach
@@ -50,7 +51,7 @@
                             <label>Pilihan 2</label>
                             <div class="select2-input">
                                 <select id="pilihan_2" name="pilihan_2" class="form-control" required>
-                                    <option value="">&nbsp;</option>
+                                    <option value="">--Pilih Salah Satu--</option>
                                     @foreach($jurusan as $j)
                                         <option value="{{ $j->id }}" {{ (isset($pilihanSiswa) && $pilihanSiswa->pilihan_2 == $j->id) ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
                                     @endforeach
@@ -60,18 +61,22 @@
                     </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <a href="" class="btn btn-success btn-sm"> LANJUT</a>
+            </div>
         </div>
     </div>
 </div>
 <script>
     $(document).ready(function() {
-        $('#pilihan_1, #pilihan_2').on('change', function() {
-            let pilihan1 = $('#pilihan_1').val();
-            let pilihan2 = $('#pilihan_2').val();
-            
+        var siswaId = "{{ auth()->user()->id }}"; // ID siswa yang login
+        var jurusanSudahDipilih = {{ $pilihanSiswa ? 'true' : 'false' }}; // Cek apakah siswa sudah memilih jurusan
+
+        function pilihJurusan(pilihan1, pilihan2, jurusanSudahDipilih) {
+            let pesan = jurusanSudahDipilih ? "Apakah Anda yakin akan merubah pilihan jurusan?" : "Apakah Anda yakin untuk memilih jurusan ini?";
             swal({
-                title: "Apakah Anda yakin?",
-                text: "Anda akan mengubah pilihan jurusan Anda.",
+                title: "Konfirmasi",
+                text: pesan,
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
@@ -88,18 +93,30 @@
                         },
                         success: function(response) {
                             if(response.success) {
-                                swal("Berhasil!", response.success, "success");
+                                swal("Berhasil!", response.success, "success")
+                                .then((value) => {
+                                    window.location.reload(); // Reload halaman setelah sukses
+                                });
                             } else {
-                                swal("Peringatan!", response.warning, "warning");
+                                swal("Error!", response.error, "error");
                             }
                         },
-                        error: function(response) {
-                            swal("Error!", "Gagal mengubah pilihan.", "error");
+                        error: function(xhr, status, error) {
+                            var err = JSON.parse(xhr.responseText);
+                            swal("Error!", err.message, "error");
                         }
                     });
                 }
             });
+        }
+
+        // Event listener untuk pilihan jurusan
+        $('#pilihan_1, #pilihan_2').on('change', function() {
+            var pilihan1 = $('#pilihan_1').val();
+            var pilihan2 = $('#pilihan_2').val();
+            pilihJurusan(pilihan1, pilihan2, jurusanSudahDipilih);
         });
     });
-</script>    
+</script>
+
 @endsection
