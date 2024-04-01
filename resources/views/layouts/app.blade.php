@@ -162,5 +162,10 @@
 			theme: "bootstrap"
 		});
 	</script>
+	<script>
+		$('#program_tambahan').select2({
+			theme: "bootstrap"
+		});
+	</script>
 </body>
 </html>

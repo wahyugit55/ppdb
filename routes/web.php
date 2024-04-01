@@ -7,6 +7,7 @@ use App\Http\Controllers\SiswaPembayaranController;
 use App\Http\Controllers\SiswaGelombangController;
 use App\Http\Controllers\SiswaJalurSeleksiController;
 use App\Http\Controllers\SiswaJurusanController;
+use App\Http\Controllers\SiswaPilihProgramController;
 
 Route::group(['middleware' => ['guest:siswa']], function () {
     Route::get('/register', [SiswaAkunController::class, 'showRegistrationForm'])->name('register');
@@ -32,6 +33,10 @@ Route::group(['middleware' => ['auth:siswa']], function () {
     //Jurusan
     Route::get('/pilih-jurusan', [SiswaJurusanController::class, 'index'])->name('siswa.pilihjurusan');
     Route::post('/pilih-jurusan', [SiswaJurusanController::class, 'store'])->name('siswa.pilihjurusan.store');
+
+    //Program Pilihan
+    Route::get('/program-tambahan', [SiswaPilihProgramController::class, 'index'])->name('siswa.programtambahan');
+    Route::post('/program-tambahan/store', [SiswaPilihProgramController::class, 'store'])->name('siswa.programtambahan.store');
 
 });
 
