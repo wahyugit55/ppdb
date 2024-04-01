@@ -33,11 +33,19 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
+                        @if($programTambahanWajib)
+                            <div class="form-group">
+                                <label>Program Tambahan Wajib</label>
+                                <input type="text" class="form-control" value="{{ $programTambahanWajib->nama_program }}" readonly>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label>Pilihan Program Tambahan (Opsional)</label>
                             <div class="select2-input">
                                 <select id="program_tambahan" name="program_tambahan" class="form-control" required>
-                                    <option value="">--Pilih Salah Satu Program Tambahan--</option>
+                                    <option value="0">--Pilih Salah Satu Program Tambahan--</option>
                                     @foreach($programTambahan as $pt)
                                         <option value="{{ $pt->id }}" {{ $pilihanProgramTambahan == $pt->id ? 'selected' : '' }}>{{ $pt->nama_program }}</option>
                                     @endforeach
@@ -59,7 +67,7 @@
         var programSudahDipilih = {{ $pilihanProgramTambahan ? 'true' : 'false' }}; // Cek apakah siswa sudah memilih jurusan
         $('#program_tambahan').on('change', function() {
             let programTambahanId = $(this).val();
-            let pesan = programSudahDipilih ? "Apakah Anda yakin akan merubah pilihan program tambahan?" : "Apakah Anda yakin untuk memilih program tambahan ini?";
+            let pesan = programSudahDipilih ? "Apakah Anda yakin akan merubah pilihan ?" : "Apakah Anda yakin untuk memilih program tambahan ini?";
             swal({
                 title: "Konfirmasi",
                 text: pesan,

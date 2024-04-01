@@ -2,18 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use App\Models\ProgramTambahan;
 use App\Models\PilihProgramTambahan;
+use App\Models\SiswaPilihJurusan;
 use Illuminate\Support\Facades\Auth;
 
 class SiswaPilihProgramController extends Controller
 {
     public function index()
     {
-        $programTambahan = ProgramTambahan::where('status', true)->get(); // Ambil program tambahan yang aktif
+        $programTambahan = ProgramTambahan::where('status', true)
+                    ->where('program_wajib', false)
+                    ->get();
+        $pilihanSiswa = SiswaPilihJurusan::where('siswa_id', auth()->user()->id)->first();
         $pilihanProgramTambahan = PilihProgramTambahan::where('siswa_id', auth()->user()->id)->pluck('program_tambahan_id')->first();
-        return view('siswa.programtambahan', compact('programTambahan','pilihanProgramTambahan'));
+
+        // Tentukan ID Program Tambahan Wajib berdasarkan pilihan jurusan siswa
+        $programTambahanWajib = null;
+        if ($pilihanSiswa) {
+            $jurusanDipilih = Jurusan::find($pilihanSiswa->pilihan_1);
+            // Cek apakah jurusan memiliki program tambahan wajib terkait
+            if ($jurusanDipilih && $jurusanDipilih->program_tambahan_id) {
+                $programTambahanWajib = ProgramTambahan::find($jurusanDipilih->program_tambahan_id);
+            }
+        }
+
+        return view('siswa.programtambahan', compact('programTambahan','pilihanProgramTambahan','programTambahanWajib'));
     }
 
     public function store(Request $request)

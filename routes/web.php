@@ -8,6 +8,7 @@ use App\Http\Controllers\SiswaGelombangController;
 use App\Http\Controllers\SiswaJalurSeleksiController;
 use App\Http\Controllers\SiswaJurusanController;
 use App\Http\Controllers\SiswaPilihProgramController;
+use App\Http\Controllers\SiswaAlamatController;
 
 Route::group(['middleware' => ['guest:siswa']], function () {
     Route::get('/register', [SiswaAkunController::class, 'showRegistrationForm'])->name('register');
@@ -37,6 +38,20 @@ Route::group(['middleware' => ['auth:siswa']], function () {
     //Program Pilihan
     Route::get('/program-tambahan', [SiswaPilihProgramController::class, 'index'])->name('siswa.programtambahan');
     Route::post('/program-tambahan/store', [SiswaPilihProgramController::class, 'store'])->name('siswa.programtambahan.store');
+
+    //Biodata
+    Route::get('/biodata', [App\Http\Controllers\SiswaBiodataController::class, 'index'])->name('siswa.biodata');
+    Route::post('/biodata', [App\Http\Controllers\SiswaBiodataController::class, 'store'])->name('siswa.biodata.store');
+
+    //Alamat
+    // Mendefinisikan route dengan menggunakan ::class syntax
+    Route::get('/get-provinces', [SiswaAlamatController::class, 'getProvinces'])->name('get-provinces');
+    Route::get('/get-regencies/{provinceId}', [SiswaAlamatController::class, 'getRegencies'])->name('get-regencies');
+    Route::get('/get-districts/{regencyId}', [SiswaAlamatController::class, 'getDistricts'])->name('get-districts');
+    Route::get('/get-villages/{districtId}', [SiswaAlamatController::class, 'getVillages'])->name('get-villages');
+
+    Route::post('/alamat/store', [SiswaAlamatController::class, 'store'])->name('alamat.store');
+
 
 });
 
