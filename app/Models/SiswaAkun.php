@@ -27,4 +27,17 @@ class SiswaAkun extends Authenticatable
             }
         });
     }
+
+    public function jadwalSeleksi()
+    {
+        return $this->belongsToMany(JadwalSeleksi::class, 'siswa_jadwal_seleksi', 'siswa_id', 'jadwal_seleksi_id')
+                    ->withPivot('status')
+                    ->wherePivot('status', true);
+    }
+
+    public function dataDiri()
+    {
+        return $this->hasOne(DataDiri::class, 'siswa_id');
+    }
+    
 }

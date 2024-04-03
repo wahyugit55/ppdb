@@ -36,7 +36,7 @@
             </div>
         </div> --}}
         <ul class="nav nav-primary">
-            <li class="nav-item">
+            <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="/dashboard">
                     <i class="fas fa-home"></i>
                     <p>Dashboard</p>
@@ -49,34 +49,46 @@
                 </span>
                 <h4 class="text-section">Main Menu</h4>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {{ Request::is('gelombang') ? 'active' : '' }}">
                 <a href="/gelombang">
                     <i class="fas fa-layer-group"></i>
                     <p>Gelombang</p>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {{ Request::is('jalur-seleksi') ? 'active' : '' }}">
                 <a href="/jalur-seleksi">
                     <i class="fas fa-layer-group"></i>
                     <p>Jalur Seleksi</p>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {{ Request::is('pilih-jurusan') ? 'active' : '' }}">
                 <a href="/pilih-jurusan">
                     <i class="fas fa-layer-group"></i>
                     <p>Jurusan</p>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {{ Request::is('program-tambahan') ? 'active' : '' }}">
                 <a href="/program-tambahan">
                     <i class="fas fa-layer-group"></i>
                     <p>Program Tambahan</p>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {{ Request::is('biodata') ? 'active' : '' }}">
                 <a href="/biodata">
                     <i class="fas fa-layer-group"></i>
                     <p>Biodata</p>
+                </a>
+            </li>
+            <li class="nav-item {{ Request::is('jadwal-seleksi') ? 'active' : '' }}">
+                <a href="/jadwal-seleksi">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Jadwal Seleksi</p>
+                </a>
+            </li>
+            <li class="nav-item {{ Request::is('pengumuman-kelulusan') ? 'active' : '' }}">
+                <a href="/pengumuman-kelulusan">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Pengumuman</p>
                 </a>
             </li>
             <li class="nav-item">

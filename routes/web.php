@@ -9,7 +9,9 @@ use App\Http\Controllers\SiswaJalurSeleksiController;
 use App\Http\Controllers\SiswaJurusanController;
 use App\Http\Controllers\SiswaPilihProgramController;
 use App\Http\Controllers\SiswaAlamatController;
+use App\Http\Controllers\SiswaJadwalSeleksiController;
 use App\Http\Controllers\SiswaOrangtuaController;
+use App\Http\Controllers\SiswaPengumumankelulusanController;
 
 Route::group(['middleware' => ['guest:siswa']], function () {
     Route::get('/register', [SiswaAkunController::class, 'showRegistrationForm'])->name('register');
@@ -56,6 +58,15 @@ Route::group(['middleware' => ['auth:siswa']], function () {
 
     //Orang Tua
     Route::post('/biodata/orang-tua', [App\Http\Controllers\SiswaOrangtuaController::class, 'store'])->name('orangtua.store');
+
+    //Jadwal Seleksi Siswa
+    Route::get('/jadwal-seleksi', [SiswaJadwalSeleksiController::class, 'index'])->name('siswa.jadwal_seleksi');
+
+    //Pengumuman Kelulusan Siswa
+    Route::get('/pengumuman-kelulusan', [SiswaPengumumankelulusanController::class, 'index'])->name('siswa.pengumuman_kelulusan');
+
+    //Verifikasi Formulir
+    Route::post('/verifikasi-formulir', [App\Http\Controllers\VerifikasiFormulirController::class, 'store'])->name('verifikasiformulir.store');
 
 
 });

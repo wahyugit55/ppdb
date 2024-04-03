@@ -29,6 +29,10 @@
                         <a class="nav-link" id="pills-contact-tab-nobd" data-toggle="pill" href="#pills-contact-nobd" role="tab" aria-controls="pills-contact-nobd" aria-selected="false"><i class="fas fa-user-friends"></i> Data Orang Tua</a>
                     </li>
                 </ul>
+                <form action="{{ route('verifikasiformulir.store') }}" method="POST">
+                    @csrf
+                <input type="hidden" name="status_verifikasi" value="1">
+            <button type="submit">SUBMIT</button></form>
             </div>
             
             <div class="card-body">

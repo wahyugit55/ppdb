@@ -48,4 +48,10 @@ class Alamat extends Model
     {
         return $this->belongsTo(Village::class, 'villages_id');
     }
+
+    // Relasi ke Siswa
+    public function siswa()
+    {
+        return $this->belongsTo(SiswaAkun::class, 'siswa_id');
+    }
 }
