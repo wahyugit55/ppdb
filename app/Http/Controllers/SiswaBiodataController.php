@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\SiswaPilihJurusan;
 use App\Models\Province;
 use App\Models\Alamat;
+use App\Models\OrangTua;
 
 class SiswaBiodataController extends Controller
 {
@@ -36,8 +37,10 @@ class SiswaBiodataController extends Controller
         $selectedDistrictId = $alamat ? $alamat->districts_id : null;
         $selectedVillageId = $alamat ? $alamat->villages_id : null;
 
+        $orangTua = OrangTua::where('siswa_id', $siswaId)->first();
+
         // Mengirim data ke view
-        return view('siswa.biodata', compact('siswa', 'dataDiri', 'pilihanJurusan', 'alamat', 'provinces', 'selectedProvinceId', 'selectedRegencyId', 'selectedDistrictId', 'selectedVillageId'));
+        return view('siswa.biodata', compact('siswa', 'dataDiri', 'pilihanJurusan', 'alamat', 'provinces', 'selectedProvinceId', 'selectedRegencyId', 'selectedDistrictId', 'selectedVillageId', 'orangTua'));
     }
 
     public function store(Request $request)

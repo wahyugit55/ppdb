@@ -250,24 +250,35 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-lg-6">
+                                        <form id="orangtuaForm">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="nama_ayah">Nama Ayah</label>
+                                                <input type="text" name="nama_ayah" class="form-control" value="{{ $orangTua->nama_ayah ?? '' }}" placeholder="Masukan nama ayah" required>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="no_hp_ayah">No HP Ayah</label>
+                                                <input type="text" name="no_hp_ayah" class="form-control" value="{{ $orangTua->no_hp_ayah ?? '' }}" placeholder="Masukan nomor hp ayah" required>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="nama_ibu">Nama Ibu</label>
+                                                <input type="text" name="nama_ibu" class="form-control" value="{{ $orangTua->nama_ibu ?? '' }}" placeholder="Masukan nama ibu" required>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="no_hp_ibu">No HP Ibu</label>
+                                                <input type="text" name="no_hp_ibu" class="form-control" value="{{ $orangTua->no_hp_ibu ?? '' }}" placeholder="Masukan nomor hp ibu" required>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6">
                                         <div class="form-group">
-                                            <label for="nama_ayah">Nama Ayah</label>
-                                            <input type="text" name="nama_ayah" class="form-control" value="" placeholder="Masukan nama ayah" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="no_hp_ayah">No HP Ayah</label>
-                                            <input type="text" name="no_hp_ayah" class="form-control" value="" placeholder="Masukan nomor hp ayah" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="nama_ibu">Nama Ibu</label>
-                                            <input type="text" name="nama_ibu" class="form-control" value="" placeholder="Masukan nama ibu" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="no_hp_ibu">No HP Ibu</label>
-                                            <input type="text" name="no_hp_ibu" class="form-control" value="" placeholder="Masukan nomor hp ibu" required>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -352,6 +363,30 @@
                 success: function(response) {
                     if(response.success) {
                         swal("Berhasil!", "Data alamat berhasil disimpan.", "success");
+                    } else {
+                        swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+                }
+            });
+        });
+
+        $('#orangtuaForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('orangtua.store') }}",
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    if(response.success) {
+                        swal("Berhasil!", "Data orang tua berhasil disimpan.", "success");
                     } else {
                         swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
                     }

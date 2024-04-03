@@ -9,6 +9,7 @@ use App\Http\Controllers\SiswaJalurSeleksiController;
 use App\Http\Controllers\SiswaJurusanController;
 use App\Http\Controllers\SiswaPilihProgramController;
 use App\Http\Controllers\SiswaAlamatController;
+use App\Http\Controllers\SiswaOrangtuaController;
 
 Route::group(['middleware' => ['guest:siswa']], function () {
     Route::get('/register', [SiswaAkunController::class, 'showRegistrationForm'])->name('register');
@@ -52,6 +53,9 @@ Route::group(['middleware' => ['auth:siswa']], function () {
 
     Route::post('/alamat/store', [SiswaAlamatController::class, 'store'])->name('alamat.store');
     Route::get('/alamat', [App\Http\Controllers\SiswaAlamatController::class, 'getAlamat'])->name('siswa.getalamat');
+
+    //Orang Tua
+    Route::post('/biodata/orang-tua', [App\Http\Controllers\SiswaOrangtuaController::class, 'store'])->name('orangtua.store');
 
 
 });
