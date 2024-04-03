@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\DataDiri;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SiswaPilihJurusan;
+use App\Models\Province;
+use App\Models\Alamat;
 
 class SiswaBiodataController extends Controller
 {
@@ -26,8 +28,16 @@ class SiswaBiodataController extends Controller
             ->where('siswa_id', $siswaId)
             ->first();
 
+        $provinces = Province::all(); // Semua provinsi
+        $alamat = Alamat::where('siswa_id', Auth::id())->first(); // Misalkan mengambil alamat berdasarkan siswa_id
+        $selectedProvinceId = $alamat ? $alamat->provinces_id : null; // ID provinsi yang tersimpan di tabel alamat
+        // Di dalam method controller Anda
+        $selectedRegencyId = $alamat ? $alamat->regencies_id : null;
+        $selectedDistrictId = $alamat ? $alamat->districts_id : null;
+        $selectedVillageId = $alamat ? $alamat->villages_id : null;
+
         // Mengirim data ke view
-        return view('siswa.biodata', compact('siswa', 'dataDiri', 'pilihanJurusan'));
+        return view('siswa.biodata', compact('siswa', 'dataDiri', 'pilihanJurusan', 'alamat', 'provinces', 'selectedProvinceId', 'selectedRegencyId', 'selectedDistrictId', 'selectedVillageId'));
     }
 
     public function store(Request $request)

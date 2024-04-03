@@ -74,6 +74,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="/biodata">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Biodata</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a data-toggle="collapse" href="#custompages">
                     <i class="fas fa-paint-roller"></i>
                     <p>Custom Pages</p>

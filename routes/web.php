@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:siswa']], function () {
     Route::get('/get-villages/{districtId}', [SiswaAlamatController::class, 'getVillages'])->name('get-villages');
 
     Route::post('/alamat/store', [SiswaAlamatController::class, 'store'])->name('alamat.store');
+    Route::get('/alamat', [App\Http\Controllers\SiswaAlamatController::class, 'getAlamat'])->name('siswa.getalamat');
 
 
 });

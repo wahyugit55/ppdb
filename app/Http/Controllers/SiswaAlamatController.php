@@ -13,12 +13,18 @@ use Illuminate\Support\Facades\Log;
 
 class SiswaAlamatController extends Controller
 {
-    public function index()
+    public function getAlamat()
     {
         $siswaId = Auth::user()->id;
         $alamat = Alamat::where('siswa_id', $siswaId)->firstOrFail(); // Gunakan firstOrFail() untuk memastikan data ada
 
-        return view('siswa.biodata', compact('alamat')); // Kirim data alamat ke view
+        // Lakukan query untuk mendapatkan nama berdasarkan ID yang disimpan di tabel alamat
+        $selectedProvince = Province::where('id', $alamat->provinces_id ?? null)->first();
+        $selectedRegency = Regency::where('id', $alamat->regencies_id ?? null)->first();
+        $selectedDistrict = District::where('id', $alamat->districts_id ?? null)->first();
+        $selectedVillage = Village::where('id', $alamat->villages_id ?? null)->first();
+
+        return view('siswa.biodata', compact('alamat','selectedProvince', 'selectedRegency', 'selectedDistrict', 'selectedVillage')); // Kirim data alamat ke view
     }
 
 
@@ -53,6 +59,9 @@ class SiswaAlamatController extends Controller
             'regency_id' => 'required|exists:regencies,id',
             'district_id' => 'required|exists:districts,id',
             'village_id' => 'required|exists:villages,id',
+            'alamat' => 'required',
+            'rt' => 'required',
+            'rw' => 'required',
         ]);
 
         $alamat = Alamat::updateOrCreate(
@@ -62,6 +71,9 @@ class SiswaAlamatController extends Controller
                 'regencies_id' => $request->regency_id,
                 'districts_id' => $request->district_id,
                 'villages_id' => $request->village_id,
+                'alamat' => $request->alamat,
+                'rt' => $request->rt,
+                'rw' => $request->rw,
                 'status' => true
             ]
         );

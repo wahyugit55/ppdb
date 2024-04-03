@@ -23,10 +23,10 @@
                         <a class="nav-link active" id="pills-home-tab-nobd" data-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true"><i class="fas fa-user"></i> Data Diri</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pills-profile-tab-nobd" data-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false">Profile</a>
+                        <a class="nav-link" id="pills-profile-tab-nobd" data-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false"><i class="fa fa-address-card" aria-hidden="true"></i> Alamat</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pills-contact-tab-nobd" data-toggle="pill" href="#pills-contact-nobd" role="tab" aria-controls="pills-contact-nobd" aria-selected="false">Contact</a>
+                        <a class="nav-link" id="pills-contact-tab-nobd" data-toggle="pill" href="#pills-contact-nobd" role="tab" aria-controls="pills-contact-nobd" aria-selected="false"><i class="fas fa-user-friends"></i> Data Orang Tua</a>
                     </li>
                 </ul>
             </div>
@@ -175,14 +175,34 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-lg-6">
-                                        <form id="alamatForm" data-saved-province="{{ $alamat->province_id ?? '' }}" data-saved-regency="{{ $alamat->regency_id ?? '' }}" data-saved-district="{{ $alamat->district_id ?? '' }}" data-saved-village="{{ $alamat->village_id ?? '' }}">
+                                        <form id="alamatForm">
 
                                             @csrf
+
+                                            <div class="form-group">
+                                                <label for="alamat">Alamat Tinggal</label>
+                                                <input type="text" name="alamat" class="form-control" value="{{ $alamat->alamat ?? '' }}" placeholder="Masukan alamat tinggal saat ini" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="rt">RT</label>
+                                                <input type="text" name="rt" class="form-control" value="{{ $alamat->rt ?? '' }}" placeholder="Masukan RT" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="rw">RW</label>
+                                                <input type="text" name="rw" class="form-control" value="{{ $alamat->rw ?? '' }}" placeholder="Masukan RW" required>
+                                            </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">
+                                        
+
                                             <div class="form-group">
                                                 <label for="province_id">Provinsi</label>
                                                 <select id="province_id" name="province_id" class="form-control" required>
                                                     <option value="">Pilih Provinsi</option>
-                                                    <!-- Options diisi oleh JavaScript -->
+                                                    @foreach ($provinces as $province)
+                                                        <option value="{{ $province->id }}" {{ $selectedProvinceId == $province->id ? 'selected' : '' }}>{{ $province->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             
@@ -209,7 +229,14 @@
                                                     <!-- Options diisi oleh JavaScript -->
                                                 </select>
                                             </div>                                        
-                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                            
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-12">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+                                        </div>
                                         </form>
                                     </div>
                                 </div>
@@ -221,9 +248,29 @@
                                         <li>Seluruh form data diri wajib di lengkapi, jika sudah terisi silahkan klik tombol simpan data diri dibagian paling bawah</li>
                                     </ul>
                                 </div>
-                                <p>Pityful a rethoric question ran over her cheek, then she continued her way. On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country.</p>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="form-group">
+                                            <label for="nama_ayah">Nama Ayah</label>
+                                            <input type="text" name="nama_ayah" class="form-control" value="" placeholder="Masukan nama ayah" required>
+                                        </div>
 
-                                <p> But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their</p>
+                                        <div class="form-group">
+                                            <label for="no_hp_ayah">No HP Ayah</label>
+                                            <input type="text" name="no_hp_ayah" class="form-control" value="" placeholder="Masukan nomor hp ayah" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="nama_ibu">Nama Ibu</label>
+                                            <input type="text" name="nama_ibu" class="form-control" value="" placeholder="Masukan nama ibu" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="no_hp_ibu">No HP Ibu</label>
+                                            <input type="text" name="no_hp_ibu" class="form-control" value="" placeholder="Masukan nomor hp ibu" required>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -235,119 +282,81 @@
 <script>
     $(document).ready(function() {
 
-        function loadRegencies(provinceId, savedRegency) {
-            $('#regency_id').empty().append('<option value="">Pilih Kabupaten/Kota</option>');
-            $.ajax({
-                url: "{{ url('/get-regencies') }}/" + provinceId,
-                type: "GET",
-                dataType: "json",
-                success: function(regencies) {
-                    regencies.forEach(function(regency) {
-                        $('#regency_id').append(new Option(regency.name, regency.id));
-                    });
-                    if(savedRegency) {
-                        $('#regency_id').val(savedRegency).change();
-                    }
-                }
-            });
-        }
-        // Memuat Provinsi dan setel default jika ada
+    var selectedProvinceId = "{{ $selectedProvinceId }}";
+    var selectedRegencyId = "{{ $selectedRegencyId }}";
+    var selectedDistrictId = "{{ $selectedDistrictId }}";
+    var selectedVillageId = "{{ $selectedVillageId }}";
+
+    function loadDropdown(selector, url, selectedId = null, callback = null) {
         $.ajax({
-            url: "{{ route('get-provinces') }}",
+            url: url,
             type: "GET",
             dataType: "json",
-            success: function(provinces) {
-                provinces.forEach(function(province) {
-                    $('#province_id').append(new Option(province.name, province.id));
+            success: function(results) {
+                var options = '<option value="">Pilih...</option>';
+                results.forEach(function(item) {
+                    var isSelected = item.id == selectedId ? ' selected' : '';
+                    options += `<option value="${item.id}"${isSelected}>${item.name}</option>`;
                 });
-                var savedProvince = $('#alamatForm').data('saved-province');
-                if(savedProvince) {
-                    $('#province_id').val(savedProvince).change();
-                }
+                $(selector).html(options);
+                if(callback) callback();
             }
         });
-    
-        // Ketika provinsi berubah
-        $('#province_id').on('change', function() {
-            var provinceId = $(this).val();
-            loadRegencies(provinceId, $('#alamatForm').data('saved-regency'));
-            $('#regency_id').empty().append('<option value="">Pilih Kabupaten/Kota</option>');
-            $('#district_id').empty().append('<option value="">Pilih Kecamatan</option>');
-            $('#village_id').empty().append('<option value="">Pilih Desa</option>');
-    
-            // AJAX request untuk mendapatkan kabupaten/kota berdasarkan provinsi
-            $.ajax({
-                url: "{{ url('/get-regencies') }}/" + provinceId,
-                type: "GET",
-                dataType: "json",
-                success: function(regencies) {
-                    regencies.forEach(function(regency) {
-                        $('#regency_id').append(new Option(regency.name, regency.id));
-                    });
-                }
-            });
+    }
+
+    // Inisialisasi untuk provinsi
+    if(selectedProvinceId) {
+        loadDropdown('#province_id', `/get-provinces`, selectedProvinceId, function() {
+            $('#province_id').val(selectedProvinceId).change(); // Trigger change untuk memuat kabupaten
         });
-    
-        // Ketika kabupaten/kota berubah
-        $('#regency_id').on('change', function() {
-            var regencyId = $(this).val();
-            $('#district_id').empty().append('<option value="">Pilih Kecamatan</option>');
-            $('#village_id').empty().append('<option value="">Pilih Desa</option>');
-    
-            // AJAX request untuk mendapatkan kecamatan berdasarkan kabupaten/kota
-            $.ajax({
-                url: "{{ url('/get-districts') }}/" + regencyId,
-                type: "GET",
-                dataType: "json",
-                success: function(districts) {
-                    districts.forEach(function(district) {
-                        $('#district_id').append(new Option(district.name, district.id));
-                    });
-                }
-            });
+    }
+
+    $('#province_id').change(function() {
+        var provinceId = $(this).val();
+        loadDropdown('#regency_id', `/get-regencies/${provinceId}`, selectedRegencyId, function() {
+            if(selectedRegencyId && provinceId == selectedProvinceId) {
+                $('#regency_id').val(selectedRegencyId).change(); // Trigger change untuk memuat kecamatan
+            }
         });
-    
-        // Ketika kecamatan berubah
-        $('#district_id').on('change', function() {
-            var districtId = $(this).val();
-            $('#village_id').empty().append('<option value="">Pilih Desa</option>');
-    
-            // AJAX request untuk mendapatkan desa berdasarkan kecamatan
-            $.ajax({
-                url: "{{ url('/get-villages') }}/" + districtId,
-                type: "GET",
-                dataType: "json",
-                success: function(villages) {
-                    villages.forEach(function(village) {
-                        $('#village_id').append(new Option(village.name, village.id));
-                    });
-                }
-            });
+    });
+
+    $('#regency_id').change(function() {
+        var regencyId = $(this).val();
+        loadDropdown('#district_id', `/get-districts/${regencyId}`, selectedDistrictId, function() {
+            if(selectedDistrictId && regencyId == selectedRegencyId) {
+                $('#district_id').val(selectedDistrictId).change(); // Trigger change untuk memuat desa
+            }
         });
+    });
+
+    $('#district_id').change(function() {
+        var districtId = $(this).val();
+        loadDropdown('#village_id', `/get-villages/${districtId}`, selectedVillageId);
+    });
+
+    // Jika Provinsi telah terpilih saat form dimuat, pemicu perubahan untuk memuat Kabupaten/Kota, Kecamatan, dan Desa
+    if ($('#province_id').val()) $('#province_id').change();
 
         // Menangani ketika form disubmit
         $('#alamatForm').on('submit', function(e) {
             e.preventDefault();
-            var formData = $(this).serialize(); // Mengambil data dari form
+            var formData = $(this).serialize();
 
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ route('alamat.store') }}", // Ganti dengan URL endpoint Anda
+                url: "{{ route('alamat.store') }}",
                 type: "POST",
                 data: formData,
                 success: function(response) {
                     if(response.success) {
-                        // Menampilkan Sweet Alert sukses
                         swal("Berhasil!", "Data alamat berhasil disimpan.", "success");
                     } else {
-                        // Menampilkan Sweet Alert error
                         swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
                     }
                 },
                 error: function(xhr, status, error) {
-                    // Menampilkan Sweet Alert error
                     swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
                 }
             });

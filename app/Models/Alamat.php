@@ -12,7 +12,7 @@ class Alamat extends Model
 
     protected $table = 'alamat';
 
-    protected $fillable = ['siswa_id', 'provinces_id', 'regencies_id', 'districts_id', 'villages_id', 'status'];
+    protected $fillable = ['siswa_id', 'alamat','rt','rw', 'provinces_id', 'regencies_id', 'districts_id', 'villages_id', 'status'];
 
 
     protected $primaryKey = 'id';
@@ -27,5 +27,25 @@ class Alamat extends Model
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
         });
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'provinces_id');
+    }
+
+    public function regency()
+    {
+        return $this->belongsTo(Regency::class, 'regencies_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'districts_id');
+    }
+
+    public function village()
+    {
+        return $this->belongsTo(Village::class, 'villages_id');
     }
 }
