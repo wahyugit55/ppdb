@@ -28,6 +28,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="pills-contact-tab-nobd" data-toggle="pill" href="#pills-contact-nobd" role="tab" aria-controls="pills-contact-nobd" aria-selected="false"><i class="fas fa-user-friends"></i> Data Orang Tua</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-contact-tab-nobd" data-toggle="pill" href="#pills-formulir-nobd" role="tab" aria-controls="pills-formulir-nobd" aria-selected="false"><i class="fas fa-user-friends"></i> Cetak Formulir</a>
+                    </li>
                 </ul>
                 <form action="{{ route('verifikasiformulir.store') }}" method="POST">
                     @csrf
@@ -285,6 +288,19 @@
                                             </form>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-formulir-nobd" role="tabpanel" aria-labelledby="pills-formulir-tab-nobd">
+                                <div class="card-sub">
+                                    <div class="alert-title">Info</div>
+                                    <ul>
+                                        <li>Silahkan cetak formulir pendaftaran melalui tombol dibawah ini, formulir wajib dicetak atau di download karena didalamnya terdapat informasi akun cbt yang akan digunakan untuk login seleksi PPDB pada tahap berikutnya</li>
+                                        <li>Tombol Cetak Formulir hanya akan aktif apabila seluruh isian form  sudah lengkap dan terverifikasi</li>
+                                        <li>Apabila ada pertanyaan bisa menghubungi admin ppdb melalui nomor berikut : 08117208814</li>
+                                    </ul>
+                                </div>
+                                <div class="text-center">
+                                    <a href="mod_formulir/print_daftar.php?id=K0owYVZ5QVRxZzRrbVg1MWVuMlR5UT09" type="button" class="btn btn-danger btn-lg"><i class="fas fa-print    "></i> Cetak Formulir</a>
                                 </div>
                             </div>
                         </div>

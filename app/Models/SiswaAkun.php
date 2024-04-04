@@ -39,5 +39,49 @@ class SiswaAkun extends Authenticatable
     {
         return $this->hasOne(DataDiri::class, 'siswa_id');
     }
+
+    public function alamat()
+    {
+        return $this->hasOne(Alamat::class, 'siswa_id');
+    }
+
+    public function orangTua()
+    {
+        return $this->hasOne(OrangTua::class, 'siswa_id');
+    }
+
+    public function cbtAccount()
+    {
+        return $this->hasOne(cbtAccount::class, 'siswa_id');
+    }
+
+    public function pilihJurusan()
+    {
+        return $this->hasOne(SiswaPilihJurusan::class, 'siswa_id');
+    }
+
+    public function siswaGelombang()
+    {
+        return $this->belongsTo(SiswaGelombang::class, 'siswa_id');
+    }
+
+    public function siswaJalurSeleksi()
+    {
+        return $this->belongsTo(SiswaJalurSeleksi::class, 'siswa_id');
+    }
+
+    public function tahunPelajaran()
+    {
+        return $this->belongsTo(TahunPelajaran::class, 'siswa_id');
+    }
+
+    public function pembayaran()
+    {
+        return $this->hasMany(SiswaPembayaran::class, 'siswa_id');
+    }
+    public function pilihProgramTambahan()
+    {
+        return $this->belongsTo(PilihProgramTambahan::class, 'siswa_id');
+    }
     
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\SiswaJalurSeleksiController;
 use App\Http\Controllers\SiswaJurusanController;
 use App\Http\Controllers\SiswaPilihProgramController;
 use App\Http\Controllers\SiswaAlamatController;
+use App\Http\Controllers\SiswaCetakFormulirController;
 use App\Http\Controllers\SiswaJadwalSeleksiController;
 use App\Http\Controllers\SiswaOrangtuaController;
 use App\Http\Controllers\SiswaPengumumankelulusanController;
@@ -67,6 +68,9 @@ Route::group(['middleware' => ['auth:siswa']], function () {
 
     //Verifikasi Formulir
     Route::post('/verifikasi-formulir', [App\Http\Controllers\VerifikasiFormulirController::class, 'store'])->name('verifikasiformulir.store');
+
+    //Siswa Cetak Formulir
+    Route::get('/cetak-formulir', [SiswaCetakFormulirController::class, 'index'])->name('siswa.cetak_formulir');
 
 
 });

@@ -17,14 +17,35 @@ class VerifikasiFormulirController extends Controller
     {
         $userId = Auth::user()->id;
 
-        // Cek apakah data diri, orang tua, dan alamat sudah terisi lengkap
+        // Ambil data dari database
         $dataDiri = DataDiri::where('siswa_id', $userId)->first();
         $orangTua = OrangTua::where('siswa_id', $userId)->first();
         $alamat = Alamat::where('siswa_id', $userId)->first();
 
+        // Definisikan kolom yang perlu dicek untuk setiap tabel
+        $kolomDataDiri = ['siswa_id', 'ukuran_baju', 'nik', 'tempat_lahir', 'tgl_lahir', 'jenis_kelamin', 'agama', 'status'];
+        $kolomOrangTua = ['siswa_id', 'nama_ayah', 'no_hp_ayah', 'nama_ibu', 'no_hp_ibu', 'status'];
+        $kolomAlamat = ['siswa_id', 'provinces_id', 'regencies_id', 'districts_id','villages_id','status','alamat','rt','rw'];
+
+        // Fungsi untuk mengecek kelengkapan data berdasarkan array kolom yang diberikan
+        function cekKelengkapanData($data, $kolomWajib) {
+            foreach ($kolomWajib as $kolom) {
+                if (empty($data->$kolom)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Cek kelengkapan data untuk DataDiri, OrangTua, dan Alamat
+        $isDataDiriComplete = $dataDiri && cekKelengkapanData($dataDiri, $kolomDataDiri);
+        $isOrangTuaComplete = $orangTua && cekKelengkapanData($orangTua, $kolomOrangTua);
+        $isAlamatComplete = $alamat && cekKelengkapanData($alamat, $kolomAlamat);
+
         // Cek apakah semua data sudah ada dan lengkap
-        if (!$dataDiri || !$orangTua || !$alamat) {
-            return response()->json(['error' => 'Siswa belum melengkapi formulir'], 400);
+        if (!$isDataDiriComplete || !$isOrangTuaComplete || !$isAlamatComplete) {
+            // return response()->json(['error' => 'Siswa belum melengkapi formulir'], 400);
+            return redirect()->back()->with('error', 'Siswa belum melengkapi formulir');
         }
 
         // Pengecekan dan update atau insert data verifikasi formulir
@@ -45,6 +66,7 @@ class VerifikasiFormulirController extends Controller
         $cbtAccount->status = true;
         $cbtAccount->save();
 
-        return response()->json(['success' => 'Verifikasi formulir dan akun CBT berhasil disimpan.']);
+        // return response()->json(['success' => 'Verifikasi formulir dan akun CBT berhasil disimpan.']);
+        return redirect()->back()->with('success', 'Verifikasi formulir berhasil disimpan');
     }
 }

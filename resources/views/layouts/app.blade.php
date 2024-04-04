@@ -153,6 +153,21 @@
 		});
 	</script>
 	<script>
+		$(document).ready(function() {
+			// Periksa apakah ada pesan 'error' dari sesi Laravel
+			@if(session('error'))
+				swal({
+					title: "Error",
+					text: "{{ session('error') }}",
+					icon: "error",
+					button: {
+						className: 'btn btn-danger'
+					},
+				});
+			@endif
+		});
+	</script>
+	<script>
 		$('#pilihan_1').select2({
 			theme: "bootstrap"
 		});
