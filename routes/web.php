@@ -10,6 +10,7 @@ use App\Http\Controllers\SiswaJurusanController;
 use App\Http\Controllers\SiswaPilihProgramController;
 use App\Http\Controllers\SiswaAlamatController;
 use App\Http\Controllers\SiswaCetakFormulirController;
+use App\Http\Controllers\SiswaCetakPengumumanController;
 use App\Http\Controllers\SiswaJadwalSeleksiController;
 use App\Http\Controllers\SiswaOrangtuaController;
 use App\Http\Controllers\SiswaPengumumankelulusanController;
@@ -65,6 +66,7 @@ Route::group(['middleware' => ['auth:siswa']], function () {
 
     //Pengumuman Kelulusan Siswa
     Route::get('/pengumuman-kelulusan', [SiswaPengumumankelulusanController::class, 'index'])->name('siswa.pengumuman_kelulusan');
+    Route::get('/cetak-pengumuman', [SiswaPengumumankelulusanController::class, 'cetak'])->name('siswa.cetak_pengumuman');
 
     //Verifikasi Formulir
     Route::post('/verifikasi-formulir', [App\Http\Controllers\VerifikasiFormulirController::class, 'store'])->name('verifikasiformulir.store');

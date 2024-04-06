@@ -30,4 +30,18 @@ class SiswaPengumumankelulusanController extends Controller
         return view('siswa.pengumuman_kelulusan', compact('pengumumanKelulusans','akunSiswa'));
     }
 
+    public function cetak()
+    {
+
+        $SiswaID = Auth::user()->id;
+
+        $pengumumanKelulusan = PengumumanKelulusan::with([
+            'SiswaAkun',
+            'SiswaJadwalSeleksi',
+            'TemplateAngsuran'
+        ])->where('id', $SiswaID)->firstOrFail();
+
+        return view('siswa.cetak_pengumuman', compact('pengumumanKelulusan'));
+    }
+
 }
