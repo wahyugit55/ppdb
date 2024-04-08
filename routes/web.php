@@ -3,6 +3,7 @@
 use App\Http\Controllers\SiswaAkunController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminBiayaController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SiswaPembayaranController;
 use App\Http\Controllers\SiswaGelombangController;
 use App\Http\Controllers\SiswaJalurSeleksiController;
@@ -82,3 +83,16 @@ Route::group(['middleware' => ['auth:siswa']], function () {
 
 Route::get('/admin/biaya', [AdminBiayaController::class, 'index'])->name('admin.biaya');
 Route::post('/admin/biaya/store', [AdminBiayaController::class, 'store'])->name('admin.biaya.store');
+
+Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function () {
+    // Dashboard Admin
+    Route::get('/dashboard', [App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/pendaftar', [App\Http\Controllers\AdminPendaftarController::class, 'index'])->name('pendaftar');
+    // Route lain yang memerlukan autentikasi admin...
+});
+
+
+Route::middleware(['guest'])->group(function () {
+    Route::post('/admin/login',[AdminController::class, 'login'])->name('admin.login');
+    Route::get('/admin/login',[AdminController::class, 'showLoginForm'])->name('admin.login');
+});

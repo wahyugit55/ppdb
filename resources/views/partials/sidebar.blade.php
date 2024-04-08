@@ -91,6 +91,14 @@
                     <p>Pengumuman</p>
                 </a>
             </li>
+            @if(Auth::guard('admin')->check())
+            <li class="nav-item {{ Request::is('admin/pendaftar') ? 'active' : '' }}">
+                <a href="/admin/pendaftar">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Data Pendaftar</p>
+                </a>
+            </li>
+            @endif
             <li class="nav-item">
                 <a data-toggle="collapse" href="#custompages">
                     <i class="fas fa-paint-roller"></i>
