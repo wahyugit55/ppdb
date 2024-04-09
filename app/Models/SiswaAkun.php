@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class SiswaAkun extends Authenticatable
 {
@@ -82,6 +83,33 @@ class SiswaAkun extends Authenticatable
     public function pilihProgramTambahan()
     {
         return $this->belongsTo(PilihProgramTambahan::class, 'siswa_id');
+    }
+
+    public function verifikasiFormulir()
+    {
+        return $this->hasOne(VerifikasiFormulir::class, 'siswa_id');
+    }
+    
+    public function getSudahVerifikasiAttribute()
+    {
+        return !is_null($this->verifikasiFormulir);
+    }
+
+    public function getSudahDaftarUlangAttribute()
+    {
+        // Mendapatkan semua ID biaya yang berstatus wajib false
+        $biayaWajibFalseIds = Biaya::where('status_wajib', false)->pluck('id')->sort()->values();
+
+        // Mendapatkan semua ID biaya dari pembayaran yang telah dilakukan siswa
+        $biayaBayarIds = $this->pembayaran->pluck('biaya_id')->unique()->sort()->values();
+
+        // \Log::info('Biaya Wajib False IDs: ' . json_encode($biayaWajibFalseIds));
+        // \Log::info('Biaya Bayar IDs: ' . json_encode($biayaBayarIds));
+
+        // Cek apakah setiap biaya wajib false sudah ada di dalam biaya yang dibayar
+        return $biayaWajibFalseIds->every(function ($biayaId) use ($biayaBayarIds) {
+            return $biayaBayarIds->contains($biayaId);
+        });
     }
     
 }

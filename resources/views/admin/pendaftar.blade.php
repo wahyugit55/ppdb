@@ -63,9 +63,23 @@
                                             {{ $siswa->sudahBayarPendaftaran ? 'Sudah Membayar Pendaftaran' : 'Belum Membayar Pendaftaran' }}
                                         </span>
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        @if ($siswa->sudahVerifikasi)
+                                            <span class="badge badge-success">Verifikasi</span>
+                                        @else
+                                            <span class="badge badge-danger">Unverified</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($siswa->sudahDaftarUlang)
+                                            <span class="badge badge-success">Sudah Daftar Ulang</span>
+                                        @else
+                                            <span class="badge badge-danger">Belum Daftar Ulang</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.pendaftar.show', $siswa->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

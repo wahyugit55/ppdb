@@ -88,7 +88,21 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Dashboard Admin
     Route::get('/dashboard', [App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/pendaftar', [App\Http\Controllers\AdminPendaftarController::class, 'index'])->name('pendaftar');
-    // Route lain yang memerlukan autentikasi admin...
+    Route::get('/pendaftar/detail/{id}', [App\Http\Controllers\AdminPendaftarController::class, 'show'])->name('pendaftar.show');
+
+    //Alamat Detail
+    Route::get('/get-provinces', [SiswaAlamatController::class, 'getProvinces'])->name('get-provinces');
+    Route::get('/get-regencies/{provinceId}', [SiswaAlamatController::class, 'getRegencies'])->name('get-regencies');
+    Route::get('/get-districts/{regencyId}', [SiswaAlamatController::class, 'getDistricts'])->name('get-districts');
+    Route::get('/get-villages/{districtId}', [SiswaAlamatController::class, 'getVillages'])->name('get-villages');
+
+    //Biodata Admin
+    Route::post('/biodata/{siswaId}', [App\Http\Controllers\AdminPendaftarController::class, 'store'])->name('biodata.store');
+    //Alamat Admin
+    Route::post('/alamat/{siswaId}', [App\Http\Controllers\AdminPendaftarController::class, 'alamatstore'])->name('alamat.store');
+    //Orang Tua Admin
+    Route::post('/biodata/orang-tua/{siswaId}', [App\Http\Controllers\AdminPendaftarController::class, 'orangtuastore'])->name('orangtua.store');
+
 });
 
 
