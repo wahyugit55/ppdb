@@ -8,6 +8,7 @@ use App\Models\DataDiri;
 use App\Models\OrangTua;
 use App\Models\Province;
 use App\Models\SiswaAkun;
+use App\Models\VerifikasiFormulir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -36,6 +37,14 @@ class AdminPendaftarController extends Controller
             
             // Menambahkan atribut custom untuk menyimpan status pembayaran pendaftaran
             $siswa->setAttribute('sudahBayarPendaftaran', $sudahBayarPendaftaran);
+
+            // Menambahkan logika untuk mengecek status verifikasi formulir
+            if ($siswa->verifikasiFormulir) {
+                $siswa->setAttribute('statusVerifikasi', $siswa->verifikasiFormulir->status_verifikasi);
+            } else {
+                // Menandakan bahwa verifikasi formulir belum ada / belum dilakukan
+                $siswa->setAttribute('statusVerifikasi', null);
+            }
         }
 
         return view('admin.pendaftar', compact('siswas'));
@@ -138,6 +147,10 @@ class AdminPendaftarController extends Controller
             'no_hp_ayah' => 'required',
             'nama_ibu' => 'required',
             'no_hp_ibu' => 'required',
+            'pekerjaan_ayah' => 'required',
+            'penghasilan_ayah' => 'required',
+            'pekerjaan_ibu' => 'required',
+            'penghasilan_ibu' => 'required'
         ]);
 
         $orangtua = OrangTua::updateOrCreate(
@@ -147,6 +160,10 @@ class AdminPendaftarController extends Controller
                 'no_hp_ayah' => $request->no_hp_ayah,
                 'nama_ibu' => $request->nama_ibu,
                 'no_hp_ibu' => $request->no_hp_ibu,
+                'pekerjaan_ayah' => $request->pekerjaan_ayah,
+                'penghasilan_ayah' => $request->penghasilan_ayah,
+                'pekerjaan_ibu' => $request->pekerjaan_ibu,
+                'penghasilan_ibu' => $request->penghasilan_ibu,
                 'status' => true
             ]
         );
@@ -154,4 +171,27 @@ class AdminPendaftarController extends Controller
         // return redirect()->back()->with('success', 'Data orang tua berhasil disimpan.');
         return response()->json(['success' => 'Data orang tua berhasil disimpan.']);
     }
+    
+    // public function verifikasiFormulir(Request $request, $siswaId)
+    // {
+    //     $request->validate([
+    //     'status_verifikasi' => 'required'
+    //     ]);
+
+    //     $statusVerifikasi = 1;
+    //     if ($request->status_verifikasi === 'unverified') {
+    //     $statusVerifikasi = 0;
+    //     }
+
+    //     $verifikasi_formulir = VerifikasiFormulir::updateOrCreate(
+    //     ['siswa_id' => $siswaId],
+    //     [
+    //         'status_verifikasi' => $statusVerifikasi,
+    //         'alasan_ditolak' => $request->alasan_ditolak,
+    //         'status' => true
+    //     ]
+    //     );
+
+    //     return response()->json(['success' => 'Formulir berhasil diverifikasi.']);
+    // }
 }

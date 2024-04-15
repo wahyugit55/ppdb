@@ -1,0 +1,49 @@
+{
+    "pekerjaan": [
+      {
+        "id": 1,
+        "nama": "Tidak Bekerja"
+      },
+      {
+        "id": 2,
+        "nama": "Buruh"
+      },
+      {
+        "id": 3,
+        "nama": "Karyawan Swasta"
+      },
+      {
+        "id": 4,
+        "nama": "Pedagang"
+      },
+      {
+        "id": 5,
+        "nama": "Pensiunan"
+      },
+      {
+        "id": 6,
+        "nama": "Petani"
+      },
+      {
+        "id": 7,
+        "nama": "Peternak"
+      },
+      {
+        "id": 8,
+        "nama": "PNS/TNI/POLRI"
+      },
+      {
+        "id": 9,
+        "nama": "Sudah Meninggal"
+      },
+      {
+        "id": 10,
+        "nama": "Tenaga Kerja Indonesia"
+      },
+      {
+        "id": 11,
+        "nama": "Wirausaha"
+      }
+    ]
+  }
+  

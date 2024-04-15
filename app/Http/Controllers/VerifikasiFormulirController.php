@@ -13,9 +13,9 @@ use App\Models\Alamat;
 
 class VerifikasiFormulirController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, $siswaId)
     {
-        $userId = Auth::user()->id;
+        $userId = $siswaId;
 
         // Ambil data dari database
         $dataDiri = DataDiri::where('siswa_id', $userId)->first();
@@ -44,14 +44,17 @@ class VerifikasiFormulirController extends Controller
 
         // Cek apakah semua data sudah ada dan lengkap
         if (!$isDataDiriComplete || !$isOrangTuaComplete || !$isAlamatComplete) {
-            // return response()->json(['error' => 'Siswa belum melengkapi formulir'], 400);
-            return redirect()->back()->with('error', 'Siswa belum melengkapi formulir');
+            return response()->json(['error' => 'Siswa belum melengkapi formulir'], 400);
+            // return redirect()->back()->with('error', 'Siswa belum melengkapi formulir');
         }
 
         // Pengecekan dan update atau insert data verifikasi formulir
         VerifikasiFormulir::updateOrCreate(
             ['siswa_id' => $userId], // Kunci pencarian
-            ['status_verifikasi' => $request->status_verifikasi] // Data yang akan diupdate atau diinsert
+            [
+                'status_verifikasi' => $request->status_verifikasi,
+                'alasan_ditolak' => $request->status_verifikasi == 0 ? $request->alasan_ditolak : null
+            ] // Data yang akan diupdate atau diinsert
         );
 
         // Proses selanjutnya untuk akun CBT...
@@ -66,7 +69,7 @@ class VerifikasiFormulirController extends Controller
         $cbtAccount->status = true;
         $cbtAccount->save();
 
-        // return response()->json(['success' => 'Verifikasi formulir dan akun CBT berhasil disimpan.']);
-        return redirect()->back()->with('success', 'Verifikasi formulir berhasil disimpan');
+        return response()->json(['success' => 'Verifikasi formulir dan akun CBT berhasil disimpan.']);
+        // return redirect()->back()->with('success', 'Verifikasi formulir berhasil disimpan');
     }
 }

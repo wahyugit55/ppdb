@@ -102,6 +102,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::post('/alamat/{siswaId}', [App\Http\Controllers\AdminPendaftarController::class, 'alamatstore'])->name('alamat.store');
     //Orang Tua Admin
     Route::post('/biodata/orang-tua/{siswaId}', [App\Http\Controllers\AdminPendaftarController::class, 'orangtuastore'])->name('orangtua.store');
+    //Verifikasi Formulir
+    Route::post('/biodata/verifikasi-formulir/{siswaId}', [App\Http\Controllers\VerifikasiFormulirController::class, 'store'])->name('verifikasi.store');
 
 });
 

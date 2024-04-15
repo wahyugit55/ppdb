@@ -8,14 +8,64 @@
     <h4 class="page-title">{{ $siswa->nama_lengkap }}</h4>
     <ul class="breadcrumbs">
         <li class="nav-home">
-            <a href="#">
-                <i class="flaticon-home"></i>
-            </a>
+            <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#modalVerifikasi">
+                <span class="text-white"><i class="fas fa-check-circle"></i> Verifikasi</span>
+            </button>
+
+            {{-- Modal Verifikasi --}}
+            <div class="modal fade" id="modalVerifikasi" tabindex="-1" role="dialog" aria-labelledby="modalVerifikasiLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="modalVerifikasiLabel">Verifikasi Formulir Pendaftaran</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        @if (is_null($siswa->statusVerifikasi))
+                        <div class="card-sub">
+                            Silahkan pilih status verifikasi dibawah ini, harap lakukan verifikasi formulir dengan sebenar - benar nya, apabila terdapat kekurangan silahkan pilih unverified dan isikan alasan nya pada kolom alasan penolakan
+                        </div>
+                        <!-- Isi form di sini -->
+                        {{ $siswa->statusVerifikasi }}
+                        <form id="formVerifikasi">
+                            <div class="form-group">
+                                <label for="Verifikasi">Pilih Status Verifikasi</label>
+                                <div class="form-check form-check-inline">
+                                    <div class="custom-control custom-radio">
+                                      <input type="radio" id="customRadio1" name="status_verifikasi" value="0" class="custom-control-input">
+                                      <label class="custom-control-label" for="customRadio1">Unverified</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                      <input type="radio" id="customRadio2" name="status_verifikasi" value="1" class="custom-control-input" checked="">
+                                      <label class="custom-control-label" for="customRadio2">Verifikasi</label>
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="form-group" id="alasanDitolakDiv" style="display: none;">
+                                <label for="alasan_ditolak">Alasan Ditolak</label>
+                                <textarea class="form-control" name="alasan_ditolak" id="alasan_ditolak" cols="30" rows="10" placeholder="Masukan alasan ditolak..." required></textarea>
+                            </div>
+                        @elseif ($siswa->statusVerifikasi == 0)
+                            <div>Unverified - Alasan: {{ $siswa->verifikasiFormulir->alasan_ditolak }}</div>
+                        @else
+                            <div>Verifikasi</div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
         </li>
     </ul>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8 col-lg-8">
         <div class="card">
             <div class="card-header">
                 <ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
@@ -262,17 +312,64 @@
                                                 <label for="no_hp_ayah">No HP Ayah</label>
                                                 <input type="text" name="no_hp_ayah" class="form-control" value="{{ $siswa->orangTua->no_hp_ayah ?? '' }}" placeholder="Masukan nomor hp ayah" required>
                                             </div>
-    
+
+                                            <!-- Pekerjaan -->
                                             <div class="form-group">
-                                                <label for="nama_ibu">Nama Ibu</label>
-                                                <input type="text" name="nama_ibu" class="form-control" value="{{ $siswa->orangTua->nama_ibu ?? '' }}" placeholder="Masukan nama ibu" required>
+                                                <label for="pekerjaan_ayah">Pekerjaan Ayah</label>
+                                                <select id="pekerjaan_ayah" name="pekerjaan_ayah" class="form-control" required>
+                                                    <option value="">--Pilih Pekerjaan Ayah--</option>
+                                                    @foreach(['Tidak Bekerja', 'Buruh', 'Karyawan Swasta', 'Pedagang', 'Pensiunan', 'Petani', 'Peternak', 'PNS/TNI/POLRI', 'Sudah Meninggal', 'Tenaga Kerja Indonesia', 'Wirausaha', 'Tidak Bekerja'] as $pekerjaan_ayah)
+                                                        <option value="{{ $pekerjaan_ayah }}" {{ (isset($siswa) && $siswa->orangTua->pekerjaan_ayah == $pekerjaan_ayah) ? 'selected' : '' }}>{{ $pekerjaan_ayah }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
-    
+
+                                            <!-- Pekerjaan -->
                                             <div class="form-group">
-                                                <label for="no_hp_ibu">No HP Ibu</label>
-                                                <input type="text" name="no_hp_ibu" class="form-control" value="{{ $siswa->orangTua->no_hp_ibu ?? '' }}" placeholder="Masukan nomor hp ibu" required>
+                                                <label for="penghasilan_ayah">Penghasilan Ayah</label>
+                                                <select id="penghasilan_ayah" name="penghasilan_ayah" class="form-control" required>
+                                                    <option value="">--Pilih Penghasilan Ayah--</option>
+                                                    @foreach(['Kurang dari Rp. 500.000', 'Rp. 500.000 s/d Rp. 999.000', 'Rp. 1 jt s/d Rp 2jt', 'Rp. 2jt s/d Rp. 4 jt', 'Rp. 5 jt s/d Rp. 20 jt', 'Tidak Berpenghasilan'] as $penghasilan_ayah)
+                                                        <option value="{{ $penghasilan_ayah }}" {{ (isset($siswa) && $siswa->orangTua->penghasilan_ayah == $penghasilan_ayah) ? 'selected' : '' }}>{{ $penghasilan_ayah }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
+
+                                            
                                         
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="form-group">
+                                            <label for="nama_ibu">Nama Ibu</label>
+                                            <input type="text" name="nama_ibu" class="form-control" value="{{ $siswa->orangTua->nama_ibu ?? '' }}" placeholder="Masukan nama ibu" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="no_hp_ibu">No HP Ibu</label>
+                                            <input type="text" name="no_hp_ibu" class="form-control" value="{{ $siswa->orangTua->no_hp_ibu ?? '' }}" placeholder="Masukan nomor hp ibu" required>
+                                        </div>
+
+                                        <!-- Pekerjaan -->
+                                        <div class="form-group">
+                                            <label for="pekerjaan_ibu">Pekerjaan Ibu</label>
+                                            <select id="pekerjaan_ibu" name="pekerjaan_ibu" class="form-control" required>
+                                                <option value="">--Pilih Pekerjaan Ibu--</option>
+                                                @foreach(['Tidak Bekerja', 'Buruh', 'Karyawan Swasta', 'Pedagang', 'Pensiunan', 'Petani', 'Peternak', 'PNS/TNI/POLRI', 'Sudah Meninggal', 'Tenaga Kerja Indonesia', 'Wirausaha', 'Tidak Bekerja'] as $pekerjaan_ibu)
+                                                    <option value="{{ $pekerjaan_ibu }}" {{ (isset($siswa) && $siswa->orangTua->pekerjaan_ibu == $pekerjaan_ibu) ? 'selected' : '' }}>{{ $pekerjaan_ibu }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <!-- Penghasilan -->
+                                        <div class="form-group">
+                                            <label for="penghasilan_ibu">Penghasilan Ibu</label>
+                                            <select id="penghasilan_ibu" name="penghasilan_ibu" class="form-control" required>
+                                                <option value="">--Pilih Penghasilan Ibu--</option>
+                                                @foreach(['Kurang dari Rp. 500.000', 'Rp. 500.000 s/d Rp. 999.000', 'Rp. 1 jt s/d Rp 2jt', 'Rp. 2jt s/d Rp. 4 jt', 'Rp. 5 jt s/d Rp. 20 jt', 'Tidak Berpenghasilan'] as $penghasilan_ibu)
+                                                    <option value="{{ $penghasilan_ibu }}" {{ (isset($siswa) && $siswa->orangTua->penghasilan_ibu == $penghasilan_ibu) ? 'selected' : '' }}>{{ $penghasilan_ibu }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -411,6 +508,62 @@
             });
         });
 
+        $('#formVerifikasi').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('admin.verifikasi.store', ['siswaId' => $siswa->id]) }}",
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    if(response.success) {
+                        swal("Berhasil!", "Formulir berhasil diverifikasi.", "success");
+                    } else {
+                        swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal("Gagal!", "Siswa belum melengkapi formulir.", "error");
+                }
+            });
+        });
+
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mendapatkan referensi ke semua radio button dengan nama 'status_verifikasi'
+        const statusVerifikasiRadios = document.querySelectorAll('input[name="status_verifikasi"]');
+        // Mendapatkan referensi ke div yang berisi form alasan ditolak dan textarea-nya
+        const alasanDitolakDiv = document.getElementById('alasanDitolakDiv');
+        const alasanDitolakTextarea = document.getElementById('alasan_ditolak');
+    
+        // Fungsi untuk memeriksa status radio button dan menampilkan/menyembunyikan form alasan ditolak
+        // serta menambahkan/menghapus atribut required pada textarea
+        function updateAlasanDitolakDisplay() {
+            const isUnverifiedSelected = document.querySelector('input[name="status_verifikasi"]:checked').value === "0";
+            alasanDitolakDiv.style.display = isUnverifiedSelected ? "" : "none";
+            // Menambahkan atau menghapus atribut required pada textarea berdasarkan pilihan
+            if (isUnverifiedSelected) {
+                alasanDitolakTextarea.setAttribute('required', '');
+            } else {
+                alasanDitolakTextarea.removeAttribute('required');
+            }
+        }
+    
+        // Menambahkan event listener ke setiap radio button untuk menghandle perubahan pilihan
+        statusVerifikasiRadios.forEach(radio => {
+            radio.addEventListener('change', updateAlasanDitolakDisplay);
+        });
+    
+        // Memeriksa status awal saat halaman dimuat
+        updateAlasanDitolakDisplay();
+    });
+</script>    
+    
 @endsection

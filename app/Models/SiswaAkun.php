@@ -92,7 +92,8 @@ class SiswaAkun extends Authenticatable
     
     public function getSudahVerifikasiAttribute()
     {
-        return !is_null($this->verifikasiFormulir);
+        // Cek apakah relasi verifikasiFormulir ada dan status_verifikasinya adalah 1
+        return !is_null($this->verifikasiFormulir) && $this->verifikasiFormulir->status_verifikasi == 1;
     }
 
     public function getSudahDaftarUlangAttribute()

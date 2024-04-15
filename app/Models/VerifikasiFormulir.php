@@ -18,6 +18,7 @@ class VerifikasiFormulir extends Model
     protected $fillable = [
         'siswa_id',
         'status_verifikasi',
+        'alasan_ditolak',
         'status',
     ];
 
