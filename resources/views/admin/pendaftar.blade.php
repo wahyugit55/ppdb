@@ -17,18 +17,17 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-title"><i class="fas fa-users"></i> Data Pendaftar</div>
-                <div class="card-category">Dibawah ini adalah tabel yang menampilkan seluruh data pendaftar calon siswa baru.</div>
                 <div class="collapse" id="search-nav">
-                    <form class="navbar-left navbar-form nav-search mr-md-3">
+                    <form class="navbar-left navbar-form nav-search mr-md-3" method="GET">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <button type="submit" class="btn btn-search pr-1">
                                     <i class="fa fa-search search-icon"></i>
                                 </button>
                             </div>
-                            <input type="text" placeholder="Search ..." class="form-control">
+                            <input type="text" name="search" placeholder="Search ..." class="form-control" value="{{ request()->search }}">
                         </div>
                     </form>
                 </div>
@@ -64,10 +63,14 @@
                                         </span>
                                     </td>
                                     <td>
-                                        @if ($siswa->sudahVerifikasi)
-                                            <span class="badge badge-success">Verifikasi</span>
+                                        @if($siswa->verifikasiFormulir)
+                                            @if($siswa->verifikasiFormulir->status_verifikasi == 0)
+                                                <span class="badge badge-danger">Unverified</span>
+                                            @elseif($siswa->verifikasiFormulir->status_verifikasi == 1)
+                                                <span class="badge badge-success">Verifikasi</span>
+                                            @endif
                                         @else
-                                            <span class="badge badge-danger">Unverified</span>
+                                            <span class="badge badge-warning">Belum Verifikasi</span>
                                         @endif
                                     </td>
                                     <td>
@@ -86,6 +89,25 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer">
+                <ul class="pagination pg-primary">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

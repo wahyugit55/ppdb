@@ -72,4 +72,22 @@ class VerifikasiFormulirController extends Controller
         return response()->json(['success' => 'Verifikasi formulir dan akun CBT berhasil disimpan.']);
         // return redirect()->back()->with('success', 'Verifikasi formulir berhasil disimpan');
     }
+
+    public function deleteBySiswaId($siswaId)
+    {
+        // Mencari dan menghapus record berdasarkan siswa_id
+        $deleteCount = VerifikasiFormulir::where('siswa_id', $siswaId)->delete();
+
+        // Jika tidak ada data yang dihapus, kirim response gagal
+        if ($deleteCount == 0) {
+            return response()->json([
+                'error' => 'Tidak ada data yang dihapus. Pastikan id siswa valid.',
+            ], 404);
+        }
+
+        // Jika berhasil, kirim response sukses
+        return response()->json([
+            'success' => 'Verifikasi berhasil dibatalkan.',
+        ], 200);
+    }
 }

@@ -23,39 +23,63 @@
                     </button>
                     </div>
                     <div class="modal-body">
-                        @if (is_null($siswa->statusVerifikasi))
-                        <div class="card-sub">
-                            Silahkan pilih status verifikasi dibawah ini, harap lakukan verifikasi formulir dengan sebenar - benar nya, apabila terdapat kekurangan silahkan pilih unverified dan isikan alasan nya pada kolom alasan penolakan
-                        </div>
-                        <!-- Isi form di sini -->
-                        {{ $siswa->statusVerifikasi }}
-                        <form id="formVerifikasi">
+                        @if($siswa->verifikasiFormulir)
+                        @if($siswa->verifikasiFormulir->status_verifikasi == 0)
                             <div class="form-group">
-                                <label for="Verifikasi">Pilih Status Verifikasi</label>
-                                <div class="form-check form-check-inline">
-                                    <div class="custom-control custom-radio">
-                                      <input type="radio" id="customRadio1" name="status_verifikasi" value="0" class="custom-control-input">
-                                      <label class="custom-control-label" for="customRadio1">Unverified</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                      <input type="radio" id="customRadio2" name="status_verifikasi" value="1" class="custom-control-input" checked="">
-                                      <label class="custom-control-label" for="customRadio2">Verifikasi</label>
-                                    </div>
-                              </div>
+                                <label for="">Status Verifikasi</label>
+                                <input type="text" class="form-control" value="{{ $siswa->verifikasiFormulir->status_verifikasi == 1 ? 'Diverifikasi' : 'Unverified' }}" readonly>
                             </div>
-                            <div class="form-group" id="alasanDitolakDiv" style="display: none;">
-                                <label for="alasan_ditolak">Alasan Ditolak</label>
-                                <textarea class="form-control" name="alasan_ditolak" id="alasan_ditolak" cols="30" rows="10" placeholder="Masukan alasan ditolak..." required></textarea>
+                            <div class="form-group">
+                                <label for="">Alasan Ditolak</label>
+                                <textarea name="" id="" cols="30" rows="10" readonly class="form-control">{{ $siswa->verifikasiFormulir->alasan_ditolak }}</textarea>
                             </div>
-                        @elseif ($siswa->statusVerifikasi == 0)
-                            <div>Unverified - Alasan: {{ $siswa->verifikasiFormulir->alasan_ditolak }}</div>
+                            <div class="form-group">
+                                <form id="formVerifikasiBatal">
+                                    <button type="submit" class="btn btn-sm btn-dark">Batalkan Verifikasi</button>
+                                </form>
+                            </div>
+                        @elseif($siswa->verifikasiFormulir->status_verifikasi == 1)
+                            <div class="form-group">
+                                <label for="">Status Verifikasi</label>
+                                <input type="text" class="form-control" value="{{ $siswa->verifikasiFormulir->status_verifikasi == 1 ? 'Sudah Diverifikasi' : 'Unverified' }}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <form id="formVerifikasiBatal">
+                                    <button type="submit" class="btn btn-sm btn-dark">Batalkan Verifikasi</button>
+                                </form>
+                            </div>
+                        @endif
                         @else
-                            <div>Verifikasi</div>
+                            <div class="card-sub">
+                                Silahkan pilih status verifikasi dibawah ini, harap lakukan verifikasi formulir dengan sebenar - benar nya, apabila terdapat kekurangan silahkan pilih unverified dan isikan alasan nya pada kolom alasan penolakan
+                            </div>
+
+                            <!-- Isi form di sini -->
+                            <form id="formVerifikasi">
+                                <div class="form-group">
+                                    <label for="Verifikasi">Pilih Status Verifikasi</label>
+                                    <div class="form-check form-check-inline">
+                                        <div class="custom-control custom-radio">
+                                        <input type="radio" id="customRadio1" name="status_verifikasi" value="0" class="custom-control-input">
+                                        <label class="custom-control-label" for="customRadio1">Unverified</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                        <input type="radio" id="customRadio2" name="status_verifikasi" value="1" class="custom-control-input" checked="">
+                                        <label class="custom-control-label" for="customRadio2">Verifikasi</label>
+                                        </div>
+                                </div>
+                                </div>
+                                <div class="form-group" id="alasanDitolakDiv" style="display: none;">
+                                    <label for="alasan_ditolak">Alasan Ditolak</label>
+                                    <textarea class="form-control" name="alasan_ditolak" id="alasan_ditolak" cols="30" rows="10" placeholder="Masukan alasan ditolak..." required></textarea>
+                                </div>
                         @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        @if(is_null($siswa->verifikasiFormulir))
                         <button type="submit" class="btn btn-primary">Kirim</button>
+                        @endif
                     </form>
                     </div>
                 </div>
@@ -528,6 +552,30 @@
                 },
                 error: function(xhr, status, error) {
                     swal("Gagal!", "Siswa belum melengkapi formulir.", "error");
+                }
+            });
+        });
+
+        $('#formVerifikasiBatal').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('admin.verifikasi.delete', ['siswaId' => $siswa->id]) }}",
+                type: "DELETE",
+                data: formData,
+                success: function(response) {
+                    if(response.success) {
+                        swal("Berhasil!", "Verifikasi berhasil dibatalkan.", "success");
+                    } else {
+                        swal("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal("Gagal!", "Ada kesalahan saat membatalkan verifikasi.", "error");
                 }
             });
         });

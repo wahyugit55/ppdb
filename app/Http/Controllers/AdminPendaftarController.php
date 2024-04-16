@@ -14,11 +14,22 @@ use Illuminate\Support\Facades\Log;
 
 class AdminPendaftarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $siswas = SiswaAkun::with(['dataDiri', 'pilihJurusan.jurusanPilihan1', 'pilihJurusan.jurusanPilihan2', 'alamat', 'orangTua', 'pembayaran.biaya','verifikasiFormulir'])
-                     ->where('status', true)
-                     ->get();
+        $search = $request->input('search');
+        $query = SiswaAkun::with(['dataDiri', 'pilihJurusan.jurusanPilihan1', 'pilihJurusan.jurusanPilihan2', 'alamat', 'orangTua', 'pembayaran.biaya','verifikasiFormulir'])
+                    ->where('status', true);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(no_pendaftaran) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(nama_lengkap) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(asal_sekolah) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(nomor_hp) LIKE ?', ['%' . strtolower($search) . '%']);
+            });
+        }
+
+        $siswas = $query->get();
 
         // Ambil semua biaya dengan status_wajib true
         $biayaWajibIds = Biaya::where('status_wajib', true)->pluck('id')->toArray();
@@ -121,7 +132,7 @@ class AdminPendaftarController extends Controller
             'rw' => 'required',
         ]);
 
-        Log::info('ID: ' . $siswaId . ' ini.');
+        // Log::info('ID: ' . $siswaId . ' ini.');
 
         $alamat = Alamat::updateOrCreate(
             ['siswa_id' => $siswaId],
